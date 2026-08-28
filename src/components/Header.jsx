@@ -12,7 +12,7 @@ export default function Header({ title, backTo }) {
 
   return (
     <header className="sticky top-0 z-10 border-b border-obsidian-700 bg-obsidian-950/95 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2.5 sm:py-3">
         <div className="flex items-center gap-3">
           {backTo && (
             <button
@@ -25,20 +25,24 @@ export default function Header({ title, backTo }) {
               </svg>
             </button>
           )}
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="Hollywood Restaurant" className="h-9 w-9 rounded-full" />
-            <span className="hidden font-display text-lg font-semibold text-gold-400 sm:inline">
-              {title ?? 'Hollywood Restaurant'}
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <img
+              src="/logo.png"
+              alt="Hollywood Restaurant"
+              className="h-11 w-11 rounded-full sm:h-12 sm:w-12 md:h-14 md:w-14"
+            />
+            <span className="max-w-[100px] truncate font-display text-sm font-semibold leading-tight text-gold-400 sm:max-w-none sm:text-lg md:text-xl">
+              {title ?? 'Hollywood'}
             </span>
           </Link>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           {isAdmin && (
             <>
               <Link
                 to="/rezervasiyalar"
-                className="rounded-full p-2 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400"
+                className="rounded-full p-1.5 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400 sm:p-2"
                 aria-label="Rezervasiyalar"
                 title="Rezervasiyalar"
               >
@@ -49,7 +53,7 @@ export default function Header({ title, backTo }) {
               </Link>
               <Link
                 to="/isciler"
-                className="rounded-full p-2 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400"
+                className="rounded-full p-1.5 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400 sm:p-2"
                 aria-label="İşçilər"
                 title="İşçilər"
               >
