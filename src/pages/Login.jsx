@@ -31,8 +31,8 @@ export default function Login() {
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-obsidian-950 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center">
-          <img src="/logo.png" alt="Hollywood Restaurant" className="h-24 w-24 rounded-full shadow-gold" />
-          <h1 className="mt-4 font-display text-2xl font-semibold text-gold-400">Hollywood Restaurant</h1>
+          <img src="/logo.png" alt="Hollywood Restaurant" className="h-40 w-40 rounded-full shadow-gold" />
+          <h1 className="mt-4 font-display text-3xl font-bold uppercase tracking-wide text-gold-400">HOLLYWOOD</h1>
           <p className="mt-1 text-sm text-obsidian-400">İdarəetmə panelinə giriş</p>
         </div>
 
