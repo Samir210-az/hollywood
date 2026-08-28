@@ -1,0 +1,22 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "employees": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "rooms": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "tables": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "reservations": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
