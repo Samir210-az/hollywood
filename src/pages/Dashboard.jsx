@@ -35,7 +35,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-obsidian-950">
         <Header />
-        <main className="mx-auto max-w-5xl px-4 py-10">
+        <main className="mx-auto max-w-6xl px-4 py-10">
           <h1 className="font-display text-2xl font-semibold text-obsidian-50">Xoş gəldiniz, {employee.name}</h1>
 
           {myUnits.length === 0 ? (
@@ -45,7 +45,7 @@ export default function Dashboard() {
           ) : (
             <>
               <p className="mt-1 text-obsidian-400">Sizə təyin olunmuş bölmələr</p>
-              <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-3">
+              <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-4 md:gap-x-6 md:gap-y-10">
                 {myUnits.map((unit) => (
                   <UnitCard key={`${unit.type}-${unit.id}`} unit={unit} type={unit.type} />
                 ))}
