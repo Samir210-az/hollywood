@@ -31,8 +31,8 @@ export default function Header({ title, backTo }) {
               alt="Hollywood Restaurant"
               className="h-11 w-11 rounded-full sm:h-12 sm:w-12 md:h-14 md:w-14"
             />
-            <span className="max-w-[100px] truncate font-display text-sm font-semibold leading-tight text-gold-400 sm:max-w-none sm:text-lg md:text-xl">
-              {title ?? 'Hollywood'}
+            <span className="max-w-[130px] truncate font-display text-lg font-bold uppercase tracking-wide text-gold-400 sm:max-w-none sm:text-2xl md:text-3xl">
+              {(title ?? 'Hollywood').toUpperCase()}
             </span>
           </Link>
         </div>
