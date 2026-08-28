@@ -47,7 +47,9 @@ export default function UnitDetail({ type }) {
     }
   }, [node, id, type, isAdmin])
 
-  const canManage = isAdmin || (employee.assignedType === type && employee.assignedId === id)
+  const canManage =
+    isAdmin ||
+    Object.values(employee.assignedUnits ?? {}).some((u) => u.type === type && u.id === id)
 
   if (!isAdmin && !canManage) return <Navigate to="/" replace />
   if (unit === null) return <Navigate to={backPath} replace />
@@ -58,24 +60,16 @@ export default function UnitDetail({ type }) {
 
   async function assignEmployee(newEmployeeId) {
     const updates = {}
+    const unitKey = `${type}-${id}`
     const currentEmployeeId = unit.assignedEmployeeId
 
     if (currentEmployeeId && currentEmployeeId !== newEmployeeId) {
-      updates[`employees/${currentEmployeeId}/assignedType`] = null
-      updates[`employees/${currentEmployeeId}/assignedId`] = null
+      updates[`employees/${currentEmployeeId}/assignedUnits/${unitKey}`] = null
     }
 
     if (newEmployeeId) {
       const newEmployee = employees.find((emp) => emp.id === newEmployeeId)
-
-      if (newEmployee?.assignedType && newEmployee?.assignedId) {
-        const otherNode = newEmployee.assignedType === 'otaq' ? 'rooms' : 'tables'
-        updates[`${otherNode}/${newEmployee.assignedId}/assignedEmployeeId`] = null
-        updates[`${otherNode}/${newEmployee.assignedId}/assignedEmployeeName`] = null
-      }
-
-      updates[`employees/${newEmployeeId}/assignedType`] = type
-      updates[`employees/${newEmployeeId}/assignedId`] = id
+      updates[`employees/${newEmployeeId}/assignedUnits/${unitKey}`] = { type, id }
       updates[`${node}/${id}/assignedEmployeeId`] = newEmployeeId
       updates[`${node}/${id}/assignedEmployeeName`] = newEmployee?.name ?? null
     } else {
@@ -128,9 +122,6 @@ export default function UnitDetail({ type }) {
                 {employees.map((emp) => (
                   <option key={emp.id} value={emp.id}>
                     {emp.name}
-                    {emp.assignedType && emp.assignedId && emp.assignedId !== id
-                      ? ` (hazırda: ${emp.assignedType === 'otaq' ? 'Otaq' : 'Masa'})`
-                      : ''}
                   </option>
                 ))}
               </select>

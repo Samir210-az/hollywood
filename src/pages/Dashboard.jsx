@@ -1,24 +1,58 @@
-import { Navigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { onValue, ref } from 'firebase/database'
+import { db } from '../firebase.js'
+import { toArray } from '../utils/toArray.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import Header from '../components/Header.jsx'
+import UnitCard from '../components/UnitCard.jsx'
 
 export default function Dashboard() {
   const { employee, isAdmin } = useAuth()
+  const [rooms, setRooms] = useState([])
+  const [tables, setTables] = useState([])
+
+  useEffect(() => {
+    if (isAdmin) return
+    const unsubRooms = onValue(ref(db, 'rooms'), (snapshot) => setRooms(toArray(snapshot.val())))
+    const unsubTables = onValue(ref(db, 'tables'), (snapshot) => setTables(toArray(snapshot.val())))
+    return () => {
+      unsubRooms()
+      unsubTables()
+    }
+  }, [isAdmin])
 
   if (!isAdmin) {
-    if (employee.assignedType && employee.assignedId) {
-      const path = employee.assignedType === 'otaq' ? '/otaqlar' : '/masalar'
-      return <Navigate to={`${path}/${employee.assignedId}`} replace />
-    }
+    const assignedUnits = Object.values(employee.assignedUnits ?? {})
+    const myUnits = assignedUnits
+      .map((entry) => {
+        const list = entry.type === 'otaq' ? rooms : tables
+        const unit = list.find((u) => u.id === entry.id)
+        return unit ? { ...unit, type: entry.type } : null
+      })
+      .filter(Boolean)
 
     return (
       <div className="min-h-screen bg-obsidian-950">
         <Header />
-        <div className="mx-auto flex max-w-md flex-col items-center px-4 py-24 text-center">
-          <p className="text-obsidian-300">
-            Sizə hələ otaq və ya masa təyin edilməyib. Administrator ilə əlaqə saxlayın.
-          </p>
-        </div>
+        <main className="mx-auto max-w-5xl px-4 py-10">
+          <h1 className="font-display text-2xl font-semibold text-obsidian-50">Xoş gəldiniz, {employee.name}</h1>
+
+          {myUnits.length === 0 ? (
+            <p className="mt-6 text-obsidian-400">
+              Sizə hələ otaq və ya masa təyin edilməyib. Administrator ilə əlaqə saxlayın.
+            </p>
+          ) : (
+            <>
+              <p className="mt-1 text-obsidian-400">Sizə təyin olunmuş bölmələr</p>
+              <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 lg:grid-cols-3">
+                {myUnits.map((unit) => (
+                  <UnitCard key={`${unit.type}-${unit.id}`} unit={unit} type={unit.type} />
+                ))}
+              </div>
+            </>
+          )}
+        </main>
       </div>
     )
   }

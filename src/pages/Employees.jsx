@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { onValue, push, ref, remove, set, update } from 'firebase/database'
+import { onValue, push, ref, set, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 import Header from '../components/Header.jsx'
@@ -52,24 +52,23 @@ export default function Employees() {
       phone: normalizedPhone,
       pin: form.pin.trim(),
       role: form.role,
-      assignedType: null,
-      assignedId: null,
     })
     setForm(emptyForm)
   }
 
   async function handleRemove(id) {
     const emp = employees?.find((item) => item.id === id)
+    const updates = { [`employees/${id}`]: null }
 
-    if (emp?.assignedType && emp?.assignedId) {
-      const node = emp.assignedType === 'otaq' ? 'rooms' : 'tables'
-      await update(ref(db), {
-        [`${node}/${emp.assignedId}/assignedEmployeeId`]: null,
-        [`${node}/${emp.assignedId}/assignedEmployeeName`]: null,
+    if (emp?.assignedUnits) {
+      Object.values(emp.assignedUnits).forEach((unitRef) => {
+        const unitNode = unitRef.type === 'otaq' ? 'rooms' : 'tables'
+        updates[`${unitNode}/${unitRef.id}/assignedEmployeeId`] = null
+        updates[`${unitNode}/${unitRef.id}/assignedEmployeeName`] = null
       })
     }
 
-    await remove(ref(db, `employees/${id}`))
+    await update(ref(db), updates)
   }
 
   return (
@@ -144,10 +143,16 @@ export default function Employees() {
                   )}
                 </p>
                 <p className="text-sm text-obsidian-400">{emp.phone}</p>
-                {emp.assignedType && (
+                {emp.assignedUnits && Object.values(emp.assignedUnits).length > 0 && (
                   <p className="text-xs text-obsidian-500">
-                    Təyinat: {emp.assignedType === 'otaq' ? 'Otaq' : 'Masa'} —{' '}
-                    {(emp.assignedType === 'otaq' ? rooms : tables).find((u) => u.id === emp.assignedId)?.name ?? '—'}
+                    Təyinat:{' '}
+                    {Object.values(emp.assignedUnits)
+                      .map((unitRef) => {
+                        const list = unitRef.type === 'otaq' ? rooms : tables
+                        return list.find((u) => u.id === unitRef.id)?.name
+                      })
+                      .filter(Boolean)
+                      .join(', ') || '—'}
                   </p>
                 )}
               </div>
