@@ -94,7 +94,7 @@ export default function UnitListPage({ type, node, title, emptyText }) {
           <p className="mt-8 text-obsidian-500">{emptyText}</p>
         )}
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           {units?.map((unit) => (
             <UnitCard key={unit.id} unit={unit} type={type} />
           ))}

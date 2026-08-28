@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { onValue, push, ref, remove, set } from 'firebase/database'
+import { onValue, push, ref, remove, set, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 import Header from '../components/Header.jsx'
 
-const emptyForm = { name: '', phone: '', pin: '', role: 'işçi', assignedType: '', assignedId: '' }
+const emptyForm = { name: '', phone: '', pin: '', role: 'işçi' }
 
 export default function Employees() {
   const [employees, setEmployees] = useState(null)
@@ -52,24 +52,34 @@ export default function Employees() {
       phone: normalizedPhone,
       pin: form.pin.trim(),
       role: form.role,
-      assignedType: form.assignedType || null,
-      assignedId: form.assignedId || null,
+      assignedType: null,
+      assignedId: null,
     })
     setForm(emptyForm)
   }
 
   async function handleRemove(id) {
+    const emp = employees?.find((item) => item.id === id)
+
+    if (emp?.assignedType && emp?.assignedId) {
+      const node = emp.assignedType === 'otaq' ? 'rooms' : 'tables'
+      await update(ref(db), {
+        [`${node}/${emp.assignedId}/assignedEmployeeId`]: null,
+        [`${node}/${emp.assignedId}/assignedEmployeeName`]: null,
+      })
+    }
+
     await remove(ref(db, `employees/${id}`))
   }
-
-  const assignmentOptions = form.assignedType === 'otaq' ? rooms : form.assignedType === 'masa' ? tables : []
 
   return (
     <div className="min-h-screen bg-obsidian-950">
       <Header title="İşçilər" backTo="/" />
       <main className="mx-auto max-w-3xl px-4 py-10">
         <h1 className="font-display text-2xl font-semibold text-obsidian-50">İşçilər</h1>
-        <p className="mt-1 text-obsidian-400">Yeni işçi əlavə edin və otaq/masa təyin edin</p>
+        <p className="mt-1 text-obsidian-400">
+          Yeni işçi əlavə edin. Otaq/masa təyinatı həmin otaq və ya masanın səhifəsindən edilir.
+        </p>
 
         <form onSubmit={handleAdd} className="mt-6 space-y-4 rounded-2xl border border-obsidian-700 bg-obsidian-800 p-5">
           <div className="grid gap-4 sm:grid-cols-2">
@@ -111,37 +121,6 @@ export default function Employees() {
                 <option value="admin">Administrator</option>
               </select>
             </div>
-            <div>
-              <label className="mb-1.5 block text-sm text-obsidian-300">Təyinat növü</label>
-              <select
-                value={form.assignedType}
-                onChange={(e) => setForm((prev) => ({ ...prev, assignedType: e.target.value, assignedId: '' }))}
-                className="w-full rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
-              >
-                <option value="">Təyin olunmayıb</option>
-                <option value="otaq">Otaq</option>
-                <option value="masa">Masa</option>
-              </select>
-            </div>
-            {form.assignedType && (
-              <div>
-                <label className="mb-1.5 block text-sm text-obsidian-300">
-                  {form.assignedType === 'otaq' ? 'Otaq seç' : 'Masa seç'}
-                </label>
-                <select
-                  value={form.assignedId}
-                  onChange={updateField('assignedId')}
-                  className="w-full rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
-                >
-                  <option value="">Seçin</option>
-                  {assignmentOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}

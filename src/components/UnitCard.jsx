@@ -28,17 +28,17 @@ export default function UnitCard({ unit, type }) {
   return (
     <Link
       to={`${basePath}/${unit.id}`}
-      className={`group relative flex flex-col justify-between rounded-2xl border bg-obsidian-800 p-5 transition ${status.ring}`}
+      className={`group relative flex flex-col justify-between rounded-2xl border bg-obsidian-800 p-4 transition sm:p-5 ${status.ring}`}
     >
-      <div className="flex items-start justify-between">
-        <h3 className="font-display text-xl font-semibold text-obsidian-50">{unit.name}</h3>
-        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${status.badge}`}>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="font-display text-base font-semibold text-obsidian-50 sm:text-xl">{unit.name}</h3>
+        <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-medium sm:px-2.5 sm:text-xs ${status.badge}`}>
           <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
           {status.label}
         </span>
       </div>
 
-      <div className="mt-6 flex items-center justify-between text-sm text-obsidian-400">
+      <div className="mt-4 flex flex-col gap-1 text-xs text-obsidian-400 sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
         <span>Tutum: {unit.capacity} nəfər</span>
         {unit.assignedEmployeeName && <span className="text-obsidian-500">{unit.assignedEmployeeName}</span>}
       </div>

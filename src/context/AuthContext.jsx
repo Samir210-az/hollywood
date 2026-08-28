@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { get, ref } from 'firebase/database'
+import { get, onValue, ref } from 'firebase/database'
 import { db, authReady } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 
@@ -7,22 +7,38 @@ const AuthContext = createContext(null)
 const STORAGE_KEY = 'hollywood_session'
 
 export function AuthProvider({ children }) {
+  const [employeeId, setEmployeeId] = useState(null)
   const [employee, setEmployee] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     authReady.finally(() => {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (saved) {
-        try {
-          setEmployee(JSON.parse(saved))
-        } catch {
-          localStorage.removeItem(STORAGE_KEY)
-        }
-      }
+      const savedId = localStorage.getItem(STORAGE_KEY)
+      if (savedId) setEmployeeId(savedId)
       setLoading(false)
     })
   }, [])
+
+  // Sessiya boyu işçi qeydini canlı izləyir — admin təyinatı (otaq/masa) və ya
+  // rolu dəyişsə, işçi yenidən daxil olmadan da bunu görür.
+  useEffect(() => {
+    if (!employeeId) {
+      setEmployee(null)
+      return
+    }
+
+    const unsubscribe = onValue(ref(db, `employees/${employeeId}`), (snapshot) => {
+      if (snapshot.exists()) {
+        setEmployee({ id: employeeId, ...snapshot.val() })
+      } else {
+        setEmployee(null)
+        setEmployeeId(null)
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [employeeId])
 
   async function login(phone, pin) {
     const snapshot = await get(ref(db, 'employees'))
@@ -38,11 +54,13 @@ export function AuthProvider({ children }) {
     }
 
     setEmployee(match)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(match))
+    setEmployeeId(match.id)
+    localStorage.setItem(STORAGE_KEY, match.id)
     return match
   }
 
   function logout() {
+    setEmployeeId(null)
     setEmployee(null)
     localStorage.removeItem(STORAGE_KEY)
   }

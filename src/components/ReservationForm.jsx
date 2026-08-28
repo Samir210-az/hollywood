@@ -3,11 +3,21 @@ import { push, ref, serverTimestamp, set } from 'firebase/database'
 import { db } from '../firebase.js'
 import { useAuth } from '../context/AuthContext.jsx'
 
-const emptyForm = { customerName: '', phone: '', date: '', time: '', guests: 2, note: '' }
+function buildEmptyForm(defaultEmployeeId) {
+  return {
+    customerName: '',
+    phone: '',
+    date: '',
+    time: '',
+    guests: 2,
+    note: '',
+    employeeId: defaultEmployeeId ?? '',
+  }
+}
 
-export default function ReservationForm({ targetType, targetId, onCreated }) {
+export default function ReservationForm({ targetType, targetId, employees = [], defaultEmployeeId = null, onCreated }) {
   const { employee } = useAuth()
-  const [form, setForm] = useState(emptyForm)
+  const [form, setForm] = useState(() => buildEmptyForm(defaultEmployeeId))
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -26,6 +36,7 @@ export default function ReservationForm({ targetType, targetId, onCreated }) {
 
     setSubmitting(true)
     try {
+      const assignedEmployee = employees.find((emp) => emp.id === form.employeeId)
       const reservationsRef = ref(db, 'reservations')
       const newRef = push(reservationsRef)
       await set(newRef, {
@@ -38,10 +49,12 @@ export default function ReservationForm({ targetType, targetId, onCreated }) {
         guests: Number(form.guests) || 1,
         note: form.note.trim(),
         status: 'aktiv',
+        employeeId: form.employeeId || null,
+        employeeName: assignedEmployee?.name ?? null,
         createdByName: employee?.name ?? 'Naməlum',
         createdAt: serverTimestamp(),
       })
-      setForm(emptyForm)
+      setForm(buildEmptyForm(defaultEmployeeId))
       onCreated?.()
     } catch (err) {
       setError('Rezervasiya yadda saxlanmadı, yenidən cəhd edin')
@@ -109,6 +122,23 @@ export default function ReservationForm({ targetType, targetId, onCreated }) {
             className="w-full rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
           />
         </div>
+        {employees.length > 0 && (
+          <div>
+            <label className="mb-1.5 block text-sm text-obsidian-300">Xidmət göstərəcək işçi</label>
+            <select
+              value={form.employeeId}
+              onChange={updateField('employeeId')}
+              className="w-full rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
+            >
+              <option value="">Təyin olunmayıb</option>
+              {employees.map((emp) => (
+                <option key={emp.id} value={emp.id}>
+                  {emp.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {error && <p className="text-sm text-red-400">{error}</p>}

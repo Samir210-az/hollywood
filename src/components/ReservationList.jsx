@@ -27,7 +27,10 @@ export default function ReservationList({ reservations }) {
               {res.date} · {res.time} · {res.guests} nəfər · {res.phone}
             </p>
             {res.note && <p className="mt-1 text-sm text-obsidian-500">{res.note}</p>}
-            <p className="mt-1 text-xs text-obsidian-600">Qeydə alan: {res.createdByName}</p>
+            <p className="mt-1 text-xs text-obsidian-600">
+              Qeydə alan: {res.createdByName}
+              {res.employeeName && ` · Xidmət: ${res.employeeName}`}
+            </p>
           </div>
 
           {res.status !== 'ləğv edilib' && (
