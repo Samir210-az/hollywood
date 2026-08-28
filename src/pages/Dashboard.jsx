@@ -6,6 +6,7 @@ import { toArray } from '../utils/toArray.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import Header from '../components/Header.jsx'
 import UnitCard from '../components/UnitCard.jsx'
+import Footer from '../components/Footer.jsx'
 
 export default function Dashboard() {
   const { employee, isAdmin } = useAuth()
@@ -33,9 +34,9 @@ export default function Dashboard() {
       .filter(Boolean)
 
     return (
-      <div className="min-h-screen bg-obsidian-950">
+      <div className="flex min-h-screen flex-col bg-obsidian-950">
         <Header />
-        <main className="mx-auto max-w-6xl px-4 py-10">
+        <main className="flex-1 mx-auto max-w-6xl px-4 py-10">
           <h1 className="font-display text-2xl font-semibold text-obsidian-50">Xoş gəldiniz, {employee.name}</h1>
 
           {myUnits.length === 0 ? (
@@ -53,14 +54,15 @@ export default function Dashboard() {
             </>
           )}
         </main>
+        <Footer />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-obsidian-950">
+    <div className="flex min-h-screen flex-col bg-obsidian-950">
       <Header />
-      <main className="mx-auto max-w-5xl px-4 py-10">
+      <main className="flex-1 mx-auto max-w-6xl px-4 py-10">
         <h1 className="font-display text-2xl font-semibold text-obsidian-50">Xoş gəldiniz, {employee.name}</h1>
         <p className="mt-1 text-obsidian-400">Zalı idarə etmək üçün bölmə seçin</p>
 
@@ -92,6 +94,7 @@ export default function Dashboard() {
           </Link>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

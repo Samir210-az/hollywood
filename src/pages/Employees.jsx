@@ -3,6 +3,7 @@ import { onValue, push, ref, set, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 import Header from '../components/Header.jsx'
+import Footer from '../components/Footer.jsx'
 
 const emptyForm = { name: '', phone: '', pin: '', role: 'işçi' }
 
@@ -72,9 +73,9 @@ export default function Employees() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian-950">
+    <div className="flex min-h-screen flex-col bg-obsidian-950">
       <Header title="İşçilər" backTo="/" />
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main className="flex-1 mx-auto max-w-3xl px-4 py-10">
         <h1 className="font-display text-2xl font-semibold text-obsidian-50">İşçilər</h1>
         <p className="mt-1 text-obsidian-400">
           Yeni işçi əlavə edin. Otaq/masa təyinatı həmin otaq və ya masanın səhifəsindən edilir.
@@ -166,6 +167,7 @@ export default function Employees() {
           ))}
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

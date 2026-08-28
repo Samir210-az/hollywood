@@ -4,6 +4,7 @@ import { onValue, ref, remove, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 import Header from '../components/Header.jsx'
+import Footer from '../components/Footer.jsx'
 
 export default function ReservationsOverview() {
   const [reservations, setReservations] = useState(null)
@@ -49,9 +50,9 @@ export default function ReservationsOverview() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian-950">
+    <div className="flex min-h-screen flex-col bg-obsidian-950">
       <Header title="Rezervasiyalar" backTo="/" />
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main className="flex-1 mx-auto max-w-3xl px-4 py-10">
         <h1 className="font-display text-2xl font-semibold text-obsidian-50">Rezervasiyalar</h1>
         <p className="mt-1 text-obsidian-400">Bütün otaq və masalar üzrə rezervasiyalar</p>
 
@@ -107,6 +108,7 @@ export default function ReservationsOverview() {
           ))}
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

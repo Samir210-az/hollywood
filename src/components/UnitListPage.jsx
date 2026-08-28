@@ -5,6 +5,7 @@ import { toArray } from '../utils/toArray.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import Header from './Header.jsx'
 import UnitCard from './UnitCard.jsx'
+import Footer from './Footer.jsx'
 
 export default function UnitListPage({ type, node, title, emptyText }) {
   const { isAdmin } = useAuth()
@@ -37,9 +38,9 @@ export default function UnitListPage({ type, node, title, emptyText }) {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian-950">
+    <div className="flex min-h-screen flex-col bg-obsidian-950">
       <Header title={title} backTo="/" />
-      <main className="mx-auto max-w-6xl px-4 py-10">
+      <main className="flex-1 mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-display text-2xl font-semibold text-obsidian-50">{title}</h1>
@@ -100,6 +101,7 @@ export default function UnitListPage({ type, node, title, emptyText }) {
           ))}
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

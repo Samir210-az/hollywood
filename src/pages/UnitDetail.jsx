@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import Header from '../components/Header.jsx'
 import ReservationForm from '../components/ReservationForm.jsx'
 import ReservationList from '../components/ReservationList.jsx'
+import Footer from '../components/Footer.jsx'
 
 const STATUS_OPTIONS = [
   { value: 'boş', label: 'Boş', activeClass: 'bg-emerald-500 text-obsidian-950' },
@@ -81,11 +82,11 @@ export default function UnitDetail({ type }) {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian-950">
+    <div className="flex min-h-screen flex-col bg-obsidian-950">
       <Header title={unit?.name ?? '...'} backTo={backPath} />
 
       {unit && (
-        <main className="mx-auto max-w-3xl px-4 py-10">
+        <main className="flex-1 mx-auto max-w-3xl px-4 py-10">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="font-display text-2xl font-semibold text-obsidian-50">{unit.name}</h1>
@@ -145,6 +146,7 @@ export default function UnitDetail({ type }) {
           </div>
         </main>
       )}
+      <Footer />
     </div>
   )
 }
