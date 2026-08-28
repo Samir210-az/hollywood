@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import RoomsList from './pages/RoomsList.jsx'
 import TablesList from './pages/TablesList.jsx'
 import UnitDetail from './pages/UnitDetail.jsx'
+import UnitEdit from './pages/UnitEdit.jsx'
 import Employees from './pages/Employees.jsx'
 import ReservationsOverview from './pages/ReservationsOverview.jsx'
 
@@ -29,6 +30,8 @@ export default function App() {
       <Route element={<ProtectedRoute adminOnly />}>
         <Route path="/isciler" element={<Employees />} />
         <Route path="/rezervasiyalar" element={<ReservationsOverview />} />
+        <Route path="/otaqlar/:id/redakte" element={<UnitEdit type="otaq" />} />
+        <Route path="/masalar/:id/redakte" element={<UnitEdit type="masa" />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

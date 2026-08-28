@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { onValue, ref, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
@@ -112,20 +112,28 @@ export default function UnitDetail({ type }) {
           </div>
 
           {isAdmin && (
-            <div className="mt-6 rounded-2xl border border-obsidian-700 bg-obsidian-800 p-5">
-              <label className="mb-1.5 block text-sm text-obsidian-300">Qulluq edən işçi</label>
-              <select
-                value={unit.assignedEmployeeId ?? ''}
-                onChange={(e) => assignEmployee(e.target.value || null)}
-                className="w-full max-w-xs rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
+            <div className="mt-6 flex items-center justify-between rounded-2xl border border-obsidian-700 bg-obsidian-800 p-5">
+              <div className="flex-1">
+                <label className="mb-1.5 block text-sm text-obsidian-300">Qulluq edən işçi</label>
+                <select
+                  value={unit.assignedEmployeeId ?? ''}
+                  onChange={(e) => assignEmployee(e.target.value || null)}
+                  className="w-full max-w-xs rounded-lg border border-obsidian-600 bg-obsidian-900 px-3.5 py-2.5 text-obsidian-50 outline-none focus:border-gold-500"
+                >
+                  <option value="">Təyin olunmayıb</option>
+                  {employees.map((emp) => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Link
+                to={`${backPath}/${id}/redakte`}
+                className="ml-4 shrink-0 rounded-lg border border-obsidian-600 px-3.5 py-2 text-sm text-obsidian-300 transition hover:border-gold-500 hover:text-gold-400"
               >
-                <option value="">Təyin olunmayıb</option>
-                {employees.map((emp) => (
-                  <option key={emp.id} value={emp.id}>
-                    {emp.name}
-                  </option>
-                ))}
-              </select>
+                Redaktə et
+              </Link>
             </div>
           )}
 
