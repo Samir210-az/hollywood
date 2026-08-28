@@ -26,7 +26,7 @@ export default function Header({ title, backTo }) {
             </button>
           )}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/hollywood/logo.png" alt="Hollywood Restaurant" className="h-9 w-9 rounded-full" />
+            <img src="/logo.png" alt="Hollywood Restaurant" className="h-9 w-9 rounded-full" />
             <span className="font-display text-lg font-semibold text-gold-400">
               {title ?? 'Hollywood Restaurant'}
             </span>

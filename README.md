@@ -48,11 +48,11 @@ panel üzərindən idarə etmək mümkündür.
 npm run dev
 ```
 
-## Deploy (GitHub Pages)
+## Deploy (Vercel)
 
-`main` branch-ə push edildikdə `.github/workflows/deploy.yml` avtomatik build edib
-GitHub Pages-ə yükləyir. Bunun üçün repo **Settings → Secrets and variables → Actions**
-bölməsində aşağıdakı secret-lər əlavə olunmalıdır:
+Repo Vercel-ə qoşulduqdan sonra `main` branch-ə hər push avtomatik deploy edir.
+Vercel Project Settings → Environment Variables bölməsində aşağıdakı dəyərlər
+əlavə olunmalıdır (Production + Preview üçün):
 
 - `VITE_FIREBASE_API_KEY`
 - `VITE_FIREBASE_AUTH_DOMAIN`
@@ -62,8 +62,9 @@ bölməsində aşağıdakı secret-lər əlavə olunmalıdır:
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - `VITE_FIREBASE_APP_ID`
 
-Repo **Settings → Pages → Source**-da `gh-pages` branch seçilməlidir (ilk workflow
-işlədikdən sonra bu branch avtomatik yaranır).
+Dəyişənlər əlavə olunandan sonra bir dəfə **Redeploy** lazımdır ki, build onları
+oxusun. `vercel.json` faylı client-side routing (React Router) üçün bütün yolları
+`index.html`-ə yönləndirir.
 
 ## Struktur
 
