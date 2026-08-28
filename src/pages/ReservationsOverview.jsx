@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { onValue, ref, update } from 'firebase/database'
+import { onValue, ref, remove, update } from 'firebase/database'
 import { db } from '../firebase.js'
 import { toArray } from '../utils/toArray.js'
 import Header from '../components/Header.jsx'
@@ -32,6 +32,10 @@ export default function ReservationsOverview() {
 
   async function cancel(id) {
     await update(ref(db, `reservations/${id}`), { status: 'ləğv edilib' })
+  }
+
+  async function deleteReservation(id) {
+    await remove(ref(db, `reservations/${id}`))
   }
 
   function unitName(res) {
@@ -83,12 +87,19 @@ export default function ReservationsOverview() {
                   </p>
                 </div>
 
-                {res.status !== 'ləğv edilib' && (
+                {res.status !== 'ləğv edilib' ? (
                   <button
                     onClick={() => cancel(res.id)}
                     className="shrink-0 rounded-lg border border-obsidian-600 px-3 py-1.5 text-xs text-obsidian-300 transition hover:border-red-500 hover:text-red-400"
                   >
                     Ləğv et
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => deleteReservation(res.id)}
+                    className="shrink-0 rounded-lg border border-obsidian-600 px-3 py-1.5 text-xs text-obsidian-300 transition hover:border-red-500 hover:text-red-400"
+                  >
+                    Sil
                   </button>
                 )}
               </div>

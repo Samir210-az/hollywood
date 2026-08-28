@@ -1,9 +1,13 @@
-import { ref, update } from 'firebase/database'
+import { ref, remove, update } from 'firebase/database'
 import { db } from '../firebase.js'
 
 export default function ReservationList({ reservations }) {
   async function cancel(id) {
     await update(ref(db, `reservations/${id}`), { status: 'ləğv edilib' })
+  }
+
+  async function deleteReservation(id) {
+    await remove(ref(db, `reservations/${id}`))
   }
 
   if (reservations.length === 0) {
@@ -33,12 +37,19 @@ export default function ReservationList({ reservations }) {
             </p>
           </div>
 
-          {res.status !== 'ləğv edilib' && (
+          {res.status !== 'ləğv edilib' ? (
             <button
               onClick={() => cancel(res.id)}
-              className="rounded-lg border border-obsidian-600 px-3 py-1.5 text-xs text-obsidian-300 transition hover:border-red-500 hover:text-red-400"
+              className="shrink-0 rounded-lg border border-obsidian-600 px-3 py-1.5 text-xs text-obsidian-300 transition hover:border-red-500 hover:text-red-400"
             >
               Ləğv et
+            </button>
+          ) : (
+            <button
+              onClick={() => deleteReservation(res.id)}
+              className="shrink-0 rounded-lg border border-obsidian-600 px-3 py-1.5 text-xs text-obsidian-300 transition hover:border-red-500 hover:text-red-400"
+            >
+              Sil
             </button>
           )}
         </div>
