@@ -17,19 +17,23 @@ export default function UnitCard({ unit, type }) {
       className={`group relative block aspect-square overflow-hidden rounded-full ring-4 ring-offset-4 ring-offset-obsidian-950 transition hover:scale-[1.03] ${status.ring}`}
     >
       <img src="/logo.png" alt="" className="h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 via-40% to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/90 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/90 to-transparent" />
 
       <span
-        className={`absolute right-[13%] top-[9%] rounded-full px-2 py-0.5 text-[10px] font-medium text-obsidian-950 sm:text-xs ${status.badge}`}
+        className={`absolute right-[13%] top-[7%] rounded-full px-2 py-0.5 text-[10px] font-medium text-obsidian-950 sm:text-xs ${status.badge}`}
       >
         {status.label}
       </span>
 
-      <div className="absolute inset-x-0 bottom-[8%] flex flex-col items-center px-2 text-center">
+      <div className="absolute inset-x-0 top-[15%] px-8 text-center">
         <span className="font-display text-base font-bold leading-tight text-white drop-shadow-lg sm:text-xl">
           {unit.name}
         </span>
-        <span className="mt-0.5 text-[11px] leading-tight text-obsidian-200 drop-shadow-lg sm:text-xs">
+      </div>
+
+      <div className="absolute inset-x-0 bottom-[8%] flex flex-col items-center px-2 text-center">
+        <span className="text-[11px] leading-tight text-obsidian-200 drop-shadow-lg sm:text-xs">
           {unit.capacity} nəfər
         </span>
         {isOccupied && unit.assignedEmployeeName && (
