@@ -14,14 +14,13 @@ export default function Dashboard() {
   const [tables, setTables] = useState([])
 
   useEffect(() => {
-    if (isAdmin) return
     const unsubRooms = onValue(ref(db, 'rooms'), (snapshot) => setRooms(toArray(snapshot.val())))
     const unsubTables = onValue(ref(db, 'tables'), (snapshot) => setTables(toArray(snapshot.val())))
     return () => {
       unsubRooms()
       unsubTables()
     }
-  }, [isAdmin])
+  }, [])
 
   if (!isAdmin) {
     const assignedUnits = Object.values(employee.assignedUnits ?? {})
@@ -67,34 +66,45 @@ export default function Dashboard() {
         <p className="mt-1 text-obsidian-400">Zalı idarə etmək üçün bölmə seçin</p>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
-          <Link
-            to="/otaqlar"
-            className="group rounded-2xl border border-obsidian-700 bg-obsidian-800 p-8 transition hover:border-gold-500 hover:shadow-gold"
-          >
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold-500/10 text-gold-400">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <h2 className="font-display text-xl font-semibold text-obsidian-50">Otaqlar</h2>
-            <p className="mt-1 text-sm text-obsidian-400">Bütün otaqların vəziyyəti və rezervasiyaları</p>
-          </Link>
-
-          <Link
-            to="/masalar"
-            className="group rounded-2xl border border-obsidian-700 bg-obsidian-800 p-8 transition hover:border-gold-500 hover:shadow-gold"
-          >
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gold-500/10 text-gold-400">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M4 10h16M4 10a2 2 0 00-2 2v1h20v-1a2 2 0 00-2-2M4 10V6a2 2 0 012-2h12a2 2 0 012 2v4M6 13v6M18 13v6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <h2 className="font-display text-xl font-semibold text-obsidian-50">Masalar</h2>
-            <p className="mt-1 text-sm text-obsidian-400">Zaldakı bütün masaların vəziyyəti və rezervasiyaları</p>
-          </Link>
+          <SectionCard to="/otaqlar" title="OTAQLAR" subtitle="Bütün otaqların vəziyyəti və rezervasiyaları" units={rooms} />
+          <SectionCard to="/masalar" title="MASALAR" subtitle="Zaldakı bütün masaların vəziyyəti və rezervasiyaları" units={tables} />
         </div>
       </main>
       <Footer />
     </div>
+  )
+}
+
+function SectionCard({ to, title, subtitle, units }) {
+  const total = units.length
+  const occupied = units.filter((u) => u.status === 'dolu').length
+  const isFull = total > 0 && occupied === total
+  const isEmpty = total > 0 && occupied === 0
+
+  const borderClass = isFull
+    ? 'border-red-600 hover:border-red-500'
+    : isEmpty
+      ? 'border-emerald-600 hover:border-emerald-500'
+      : 'border-obsidian-700 hover:border-gold-500'
+
+  return (
+    <Link
+      to={to}
+      className={`group relative rounded-2xl border bg-obsidian-800 p-8 transition hover:shadow-gold ${borderClass}`}
+    >
+      {total > 0 && (
+        <span
+          className={`absolute right-6 top-6 rounded-full px-2.5 py-1 text-xs font-semibold ${
+            isFull ? 'bg-red-500/15 text-red-400' : isEmpty ? 'bg-emerald-500/15 text-emerald-400' : 'bg-obsidian-700 text-obsidian-300'
+          }`}
+        >
+          {occupied}/{total}
+        </span>
+      )}
+
+      <img src="/logo.png" alt="" className="mb-4 h-12 w-12 rounded-full" />
+      <h2 className="font-display text-xl font-bold uppercase tracking-wide text-obsidian-50">{title}</h2>
+      <p className="mt-1 text-sm text-obsidian-400">{subtitle}</p>
+    </Link>
   )
 }
