@@ -7,6 +7,7 @@ import RoomsList from './pages/RoomsList.jsx'
 import TablesList from './pages/TablesList.jsx'
 import UnitDetail from './pages/UnitDetail.jsx'
 import Employees from './pages/Employees.jsx'
+import ReservationsOverview from './pages/ReservationsOverview.jsx'
 
 export default function App() {
   const { loading } = useAuth()
@@ -27,6 +28,7 @@ export default function App() {
 
       <Route element={<ProtectedRoute adminOnly />}>
         <Route path="/isciler" element={<Employees />} />
+        <Route path="/rezervasiyalar" element={<ReservationsOverview />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

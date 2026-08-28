@@ -27,13 +27,41 @@ export default function Header({ title, backTo }) {
           )}
           <Link to="/" className="flex items-center gap-2">
             <img src="/logo.png" alt="Hollywood Restaurant" className="h-9 w-9 rounded-full" />
-            <span className="font-display text-lg font-semibold text-gold-400">
+            <span className="hidden font-display text-lg font-semibold text-gold-400 sm:inline">
               {title ?? 'Hollywood Restaurant'}
             </span>
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          {isAdmin && (
+            <>
+              <Link
+                to="/rezervasiyalar"
+                className="rounded-full p-2 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400"
+                aria-label="Rezervasiyalar"
+                title="Rezervasiyalar"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M3 10h18M8 3v4M16 3v4" strokeLinecap="round" />
+                </svg>
+              </Link>
+              <Link
+                to="/isciler"
+                className="rounded-full p-2 text-obsidian-300 transition hover:bg-obsidian-800 hover:text-gold-400"
+                aria-label="İşçilər"
+                title="İşçilər"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </>
+          )}
+
           <div className="hidden text-right sm:block">
             <p className="text-sm font-medium text-obsidian-100">{employee?.name}</p>
             <p className="text-xs text-obsidian-400">{isAdmin ? 'Administrator' : 'İşçi'}</p>

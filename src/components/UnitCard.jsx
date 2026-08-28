@@ -24,23 +24,32 @@ const STATUS_STYLES = {
 export default function UnitCard({ unit, type }) {
   const status = STATUS_STYLES[unit.status] ?? STATUS_STYLES['boş']
   const basePath = type === 'otaq' ? '/otaqlar' : '/masalar'
+  const isOccupied = unit.status !== 'boş'
 
   return (
     <Link
       to={`${basePath}/${unit.id}`}
-      className={`group relative flex flex-col justify-between rounded-2xl border bg-obsidian-800 p-4 transition sm:p-5 ${status.ring}`}
+      className={`group relative flex flex-col rounded-2xl border bg-obsidian-800 p-4 transition sm:p-5 ${status.ring}`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="font-display text-base font-semibold text-obsidian-50 sm:text-xl">{unit.name}</h3>
+        <img
+          src="/logo.png"
+          alt=""
+          className="h-8 w-8 shrink-0 rounded-full opacity-90 sm:h-10 sm:w-10"
+        />
         <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-medium sm:px-2.5 sm:text-xs ${status.badge}`}>
           <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
           {status.label}
         </span>
       </div>
 
-      <div className="mt-4 flex flex-col gap-1 text-xs text-obsidian-400 sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+      <h3 className="mt-3 font-display text-lg font-semibold text-obsidian-50 sm:text-xl">{unit.name}</h3>
+
+      <div className="mt-3 flex flex-col gap-0.5 text-xs text-obsidian-400 sm:text-sm">
         <span>Tutum: {unit.capacity} nəfər</span>
-        {unit.assignedEmployeeName && <span className="text-obsidian-500">{unit.assignedEmployeeName}</span>}
+        {isOccupied && unit.assignedEmployeeName && (
+          <span className="text-gold-400">{unit.assignedEmployeeName}</span>
+        )}
       </div>
     </Link>
   )

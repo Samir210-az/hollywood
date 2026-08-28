@@ -57,13 +57,6 @@ export default function Dashboard() {
             <p className="mt-1 text-sm text-obsidian-400">Zaldakı bütün masaların vəziyyəti və rezervasiyaları</p>
           </Link>
         </div>
-
-        <Link
-          to="/isciler"
-          className="mt-5 inline-flex items-center gap-2 text-sm text-obsidian-400 transition hover:text-gold-400"
-        >
-          İşçiləri idarə et →
-        </Link>
       </main>
     </div>
   )
