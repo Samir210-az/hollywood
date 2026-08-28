@@ -102,7 +102,7 @@ function SectionCard({ to, title, subtitle, units }) {
         </span>
       )}
 
-      <img src="/logo.png" alt="" className="mb-4 h-12 w-12 rounded-full" />
+      <img src="/logo.png" alt="" className="mb-4 h-16 w-16 rounded-full" />
       <h2 className="font-display text-xl font-bold uppercase tracking-wide text-obsidian-50">{title}</h2>
       <p className="mt-1 text-sm text-obsidian-400">{subtitle}</p>
     </Link>
